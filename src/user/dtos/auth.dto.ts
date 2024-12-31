@@ -9,7 +9,7 @@ import {
   Matches,
   IsEnum,
   IsOptional,
-} from 'class-validator';
+} from 'class-validator'; //
 
 export class SignupDto {
   @IsString()
