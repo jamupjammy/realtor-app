@@ -28,6 +28,8 @@ export class HomeResponseDto {
   }
   price: number;
 
+  image: string;
+
   @Exclude()
   land_size: number;
   @Expose({ name: 'landSize' })
