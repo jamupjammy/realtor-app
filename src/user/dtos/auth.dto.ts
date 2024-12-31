@@ -1,3 +1,5 @@
+// import { PartialType, OmitType } from '@nestjs/mapped-types';
+// mapped-types import not working
 import {
   IsString,
   IsNotEmpty,
@@ -24,3 +26,18 @@ export class SignupDto {
   @MinLength(5)
   password: string;
 }
+
+export class SigninDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  password: string;
+}
+
+// export class SigninDto extends OmitType(SignupDto, ['name', 'phone']) {}
+// Combining Partial and Omit.
+// export class UpdatePublicUserDto extends PartialType(
+//   OmitType(CreateUserDto, ['password']),
+// ) {}
