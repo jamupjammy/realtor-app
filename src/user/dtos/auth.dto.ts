@@ -1,11 +1,14 @@
 // import { PartialType, OmitType } from '@nestjs/mapped-types';
 // mapped-types import not working
+import { UserType } from '@prisma/client';
 import {
   IsString,
   IsNotEmpty,
   IsEmail,
   MinLength,
   Matches,
+  IsEnum,
+  IsOptional,
 } from 'class-validator';
 
 export class SignupDto {
@@ -25,6 +28,10 @@ export class SignupDto {
   @IsString()
   @MinLength(5)
   password: string;
+
+  @IsOptional()
+  @IsString()
+  productKey?: string;
 }
 
 export class SigninDto {
@@ -34,6 +41,16 @@ export class SigninDto {
 
   @IsString()
   password: string;
+}
+
+export class generateProductKeyDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsEnum(UserType)
+  @IsNotEmpty()
+  userType: UserType;
 }
 
 // export class SigninDto extends OmitType(SignupDto, ['name', 'phone']) {}
