@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { HomeResponseDto } from './dto/home.dto';
+import { CreateHomeDto, HomeResponseDto } from './dto/home.dto';
 import { PropertyType } from '@prisma/client';
 
 interface GetHomesParam {
@@ -67,5 +67,38 @@ export class HomeService {
     const fetchedHome = { ...home, image: home?.images[0]?.url };
     delete fetchedHome.images;
     return new HomeResponseDto(fetchedHome);
+  }
+
+  async createHome({
+    address,
+    city,
+    images,
+    landSize,
+    numberOfBathrooms,
+    numberOfBedrooms,
+    price,
+    propertyType,
+  }: CreateHomeDto) {
+    const home = await this.prismaService.home.create({
+      data: {
+        address,
+        city,
+        land_size: landSize,
+        number_of_bathrooms: numberOfBathrooms,
+        number_of_bedrooms: numberOfBedrooms,
+        price,
+        propertyType,
+        realtor_id: 4,
+      },
+    });
+    const homeImages = images.map((image) => {
+      return { ...image, home_id: home.id };
+    });
+
+    await this.prismaService.image.createMany({
+      data: homeImages,
+    });
+
+    return new HomeResponseDto(home);
   }
 }
