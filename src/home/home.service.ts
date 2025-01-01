@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateHomeDto, HomeResponseDto } from './dto/home.dto';
+import { CreateHomeDto, HomeResponseDto, UpdateHomeDto } from './dto/home.dto';
 import { PropertyType } from '@prisma/client';
 
 interface GetHomesParam {
@@ -100,5 +100,26 @@ export class HomeService {
     });
 
     return new HomeResponseDto(home);
+  }
+
+  async updateHomeById(
+    id: number,
+    data: UpdateHomeDto,
+  ): Promise<HomeResponseDto> {
+    const home = await this.prismaService.home.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!home) {
+      throw new NotFoundException();
+    }
+    const updatedHome = await this.prismaService.home.update({
+      where: {
+        id,
+      },
+      data,
+    });
+    return new HomeResponseDto(updatedHome);
   }
 }
