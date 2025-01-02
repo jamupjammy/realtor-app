@@ -43,7 +43,7 @@ export class SigninDto {
   password: string;
 }
 
-export class generateProductKeyDto {
+export class GenerateProductKeyDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
