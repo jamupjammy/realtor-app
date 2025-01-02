@@ -117,12 +117,15 @@ export class HomeService {
     if (!home) {
       throw new NotFoundException();
     }
+    console.log('home id is', id);
+    console.log('data is', data);
     const updatedHome = await this.prismaService.home.update({
       where: {
         id,
       },
       data,
     });
+
     return new HomeResponseDto(updatedHome);
   }
 

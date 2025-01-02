@@ -62,6 +62,7 @@ export class HomeController {
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateHomeDto,
   ): Promise<HomeResponseDto> {
+    console.log('this is from controller', id, body);
     return this.homeService.updateHomeById(id, body);
   }
 
