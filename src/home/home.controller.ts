@@ -12,8 +12,11 @@ import {
 } from '@nestjs/common';
 import { HomeService } from './home.service';
 import { CreateHomeDto, HomeResponseDto, UpdateHomeDto } from './dto/home.dto';
-import { PropertyType } from '@prisma/client';
+import { PropertyType, UserType } from '@prisma/client';
 import { User, UserInfo } from 'src/user/decorators/user.decorator';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/user/guards/auth.guard';
+import { Roles } from 'src/user/decorators/role.decorator';
 
 @Controller('home')
 export class HomeController {
@@ -51,13 +54,16 @@ export class HomeController {
   getHome(@Param('id', ParseIntPipe) id: number): Promise<HomeResponseDto> {
     return this.homeService.getHomeById(id);
   }
-
+  @Roles(UserType.BUYER, UserType.ADMIN)
+  @UseGuards(AuthGuard)
   @Post()
   createHome(@Body() body: CreateHomeDto, @User() user: UserInfo) {
-    console.log(user);
-    return this.homeService.createHome(body, user.id);
+    // return this.homeService.createHome(body, user.id);
+    return 'Create Home';
   }
 
+  @Roles(UserType.BUYER, UserType.ADMIN)
+  @UseGuards(AuthGuard)
   @Put(':id')
   async updateHome(
     @Param('id', ParseIntPipe) id: number,
@@ -72,6 +78,8 @@ export class HomeController {
     return this.homeService.updateHomeById(id, body);
   }
 
+  @Roles(UserType.BUYER, UserType.ADMIN)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteHome(
     @Param('id', ParseIntPipe) id: number,
